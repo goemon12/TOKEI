@@ -11,38 +11,51 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
+    func makeTextH() -> SCNNode {
+        let n = 12
+        let node = SCNNode()
+        for i in 0 ..< n {
+            let text = SCNNode(geometry: SCNBox(width: 0.3, height: 0.1, length: 0.1, chamferRadius: 0))
+            text.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+            let t = CGFloat.pi * 2 / CGFloat(n) * CGFloat(i)
+            let x = cos(t) * 3
+            let y = sin(t) * 3
+            text.position = SCNVector3(x, y, 0)
+            text.rotation = SCNVector4(0, 0, 1, t)
+            node.addChildNode(text)
+        }
+        return node
+    }
 
+    func makeTextM() -> SCNNode {
+        let n = 60
+        let node = SCNNode()
+        for i in 0 ..< n {
+            let text = SCNNode(geometry: SCNBox(width: 0.3, height: 0.1, length: 0.1, chamferRadius: 0))
+            text.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+            let t = CGFloat.pi * 2 / CGFloat(n) * CGFloat(i)
+            let x = cos(t) * 3
+            let y = sin(t) * 3
+            text.position = SCNVector3(x, y, 0)
+            text.rotation = SCNVector4(0, 0, 1, t)
+            node.addChildNode(text)
+        }
+        return node
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/tokei.scn")!
-/*
-        // create and add a camera to the scene
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        scene.rootNode.addChildNode(cameraNode)
+        let nodeTextM = makeTextM()
+        let nodeTextH = makeTextH()
         
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-*/
+        nodeTextM.position = SCNVector3(0, 0, 0)
+        nodeTextH.position = SCNVector3(0, 0, 0.5)
+        scene.rootNode.addChildNode(nodeTextM)
+        scene.rootNode.addChildNode(nodeTextH)
 
-/*
-        // create and add a light to the scene
-        let lightNode = SCNNode()
-        lightNode.light = SCNLight()
-        lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-        scene.rootNode.addChildNode(lightNode)
-        
-        // create and add an ambient light to the scene
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = UIColor.darkGray
-        scene.rootNode.addChildNode(ambientLightNode)
- */
- 
         // retrieve the SCNView
         let scnView = self.view as! SCNView
         
