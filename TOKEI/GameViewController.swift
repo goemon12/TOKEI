@@ -11,6 +11,13 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
+    var fmtH: DateFormatter!
+    var fmtM: DateFormatter!
+    var scene: SCNScene!
+    var hariH: SCNNode!
+    var hariM: SCNNode!
+    var tim: Timer!
+    
     func makeTextH() -> SCNNode {
         let n = 12
         let node = SCNNode()
@@ -47,7 +54,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/tokei.scn")!
+        scene = SCNScene(named: "art.scnassets/tokei.scn")!
         let nodeTextM = makeTextM()
         let nodeTextH = makeTextH()
         
@@ -70,5 +77,26 @@ class GameViewController: UIViewController {
         
         // configure the view
         scnView.backgroundColor = UIColor.black
+        
+        fmtH = DateFormatter()
+        fmtM = DateFormatter()
+        fmtH.dateFormat = "HH"
+        fmtH.dateFormat = "mm"
+        
+        hariM = scene.rootNode.childNode(withName: "HARI-L", recursively: true)
+        hariH = scene.rootNode.childNode(withName: "HARI-S", recursively: true)
+
+       tim = Timer(timeInterval: 1, repeats: true, block: {
+            _ in
+            let t = Date()
+            let strH = self.fmtH.string(from: t)
+            let strM = self.fmtM.string(from: t)
+            let h = Int(strH)!
+            let m = Int(strM)!
+            self.hariH.rotation = SCNVector4(0, 0, 1, CGFloat.pi * 2 / 12 * CGFloat(h))
+            self.hariM.rotation = SCNVector4(0, 0, 1, CGFloat.pi * 2 / 60 * CGFloat(m))
+            print("AAA")
+       })
+        
     }
 }
