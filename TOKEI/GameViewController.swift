@@ -17,17 +17,18 @@ class GameViewController: UIViewController {
     var scene: SCNScene!
     var hariH: SCNNode!
     var hariM: SCNNode!
+    var hariS: SCNNode!
     var tim: Timer!
     
     func makeTextH() -> SCNNode {
         let n = 12
         let node = SCNNode()
         for i in 0 ..< n {
-            let text = SCNNode(geometry: SCNBox(width: 0.3, height: 0.1, length: 0.1, chamferRadius: 0))
-            text.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+            let text = SCNNode(geometry: SCNBox(width: 0.5, height: 0.2, length: 0.1, chamferRadius: 0))
+            text.geometry?.firstMaterial?.diffuse.contents = UIColor.black
             let t = CGFloat.pi * 2 / CGFloat(n) * CGFloat(i)
-            let x = cos(t) * 3
-            let y = sin(t) * 3
+            let x = cos(t) * 2.8
+            let y = sin(t) * 2.8
             text.position = SCNVector3(x, y, 0)
             text.rotation = SCNVector4(0, 0, 1, t)
             node.addChildNode(text)
@@ -39,11 +40,11 @@ class GameViewController: UIViewController {
         let n = 60
         let node = SCNNode()
         for i in 0 ..< n {
-            let text = SCNNode(geometry: SCNBox(width: 0.3, height: 0.1, length: 0.1, chamferRadius: 0))
-            text.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+            let text = SCNNode(geometry: SCNBox(width: 0.5, height: 0.1, length: 0.1, chamferRadius: 0))
+            text.geometry?.firstMaterial?.diffuse.contents = UIColor.darkGray
             let t = CGFloat.pi * 2 / CGFloat(n) * CGFloat(i)
-            let x = cos(t) * 3
-            let y = sin(t) * 3
+            let x = cos(t) * 2.8
+            let y = sin(t) * 2.8
             text.position = SCNVector3(x, y, 0)
             text.rotation = SCNVector4(0, 0, 1, t)
             node.addChildNode(text)
@@ -55,12 +56,12 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         // create a new scene
-        scene = SCNScene(named: "art.scnassets/tokei.scn")!
+        scene = SCNScene(named: "art.scnassets/tokei2.scn")!
         let nodeTextM = makeTextM()
         let nodeTextH = makeTextH()
         
-        nodeTextM.position = SCNVector3(0, 0, 0)
-        nodeTextH.position = SCNVector3(0, 0, 0.5)
+        nodeTextM.position = SCNVector3(0, 0, 0.5)
+        nodeTextH.position = SCNVector3(0, 0, 1.0)
         scene.rootNode.addChildNode(nodeTextM)
         scene.rootNode.addChildNode(nodeTextH)
 
@@ -86,8 +87,9 @@ class GameViewController: UIViewController {
         fmtM.dateFormat = "mm"
         fmtS.dateFormat = "ss"
         
-        hariM = scene.rootNode.childNode(withName: "HARI-L", recursively: true)
-        hariH = scene.rootNode.childNode(withName: "HARI-S", recursively: true)
+        hariM = scene.rootNode.childNode(withName: "HARI-M", recursively: true)
+        hariH = scene.rootNode.childNode(withName: "HARI-H", recursively: true)
+        hariS = scene.rootNode.childNode(withName: "HARI-S", recursively: true)
 
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: {
             _ in
@@ -100,6 +102,7 @@ class GameViewController: UIViewController {
             let s = Int(strS)!
             self.hariH.rotation = SCNVector4(0, 0, 1, CGFloat.pi * 2 /  720 * -CGFloat(h * 60 + m))
             self.hariM.rotation = SCNVector4(0, 0, 1, CGFloat.pi * 2 / 3600 * -CGFloat(m * 60 + s))
+            self.hariS.rotation = SCNVector4(0, 0, 1, CGFloat.pi * 2 / 60 * -CGFloat(s))
        })
     }
 }
